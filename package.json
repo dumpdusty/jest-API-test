@@ -1,0 +1,26 @@
+{
+  "name": "paysis-jest",
+  "version": "1.0.0",
+  "description": "api tests for paysis project",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Dump Dusty",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/preset-env": "7.22.5",
+    "axios": "1.4.0",
+    "babel-plugin-module-resolver": "5.0.0",
+    "jest": "^29.5.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  },
+  "jest": {
+    "transform": {
+      "\\.[jt]sx?$": "babel-jest"
+    }
+  }
+}
