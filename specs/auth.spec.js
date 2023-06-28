@@ -1,8 +1,9 @@
 import {request} from "../common/request";
+// import 'dotenv/config'
 
 describe('Authorization & Authentication', () => {
     test('Sign in with valid credentials', async () => {
-        const response = await request.post('/auth', {login: 'adminius', password: 'supers3cret'})
+        const response = await request.post('/auth', {login: process.env.LOGIN, password: process.env.PASSWORD})
         expect(response.status).toEqual(200)
         expect(response.data).toEqual({token: expect.any(String)})
     });
