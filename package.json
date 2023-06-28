@@ -20,11 +20,11 @@
     "prettier": "^2.8.8"
   },
   "jest": {
-    "setupFiles": [
-      "<rootDir>/jest.setup.js"
-    ],
     "transform": {
       "\\.[jt]sx?$": "babel-jest"
-    }
+    },
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ]
   }
 }

@@ -1,5 +1,5 @@
-import {request} from "../common/request";
-// import 'dotenv/config'
+import {request} from "common/request";
+
 
 describe('Authorization & Authentication', () => {
     test('Sign in with valid credentials', async () => {
