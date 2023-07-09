@@ -1,6 +1,6 @@
 import { signIn } from '../helpers'
 
-describe('Authorization & Authentication', () => {
+describe('Auth', () => {
   test('Sign in with valid credentials', async () => {
     const response = await signIn(process.env.LOGIN, process.env.PASSWORD)
 
