@@ -9,22 +9,20 @@ describe('User', () => {
   })
 
   test('Create user', async () => {
-    const response = await user.create()
+    const { status, data } = await user.create()
 
-    expect(response.status).toEqual(200)
-    expect(response.data).toEqual({
-      id: expect.any(String),
-      amount: expect.any(Number),
-    })
+    expect(status).toEqual(200)
+    expect(data.id).toEqual(expect.any(String))
+    expect(data.amount).toEqual(expect.any(Number))
   })
 
   test('Get user by Id', async () => {
     const userId = (await user.create()).data.id
-    const response = await user.getSingle(userId)
+    const { status, data } = await user.getSingle(userId)
 
-    expect(response.status).toEqual(200)
-    expect(response.data.id).toEqual(userId)
-    expect(response.data.amount).toEqual(expect.any(Number))
+    expect(status).toEqual(200)
+    expect(data.id).toEqual(userId)
+    expect(data.amount).toEqual(expect.any(Number))
   })
 
   test('Get all users', async () => {
@@ -45,9 +43,19 @@ describe('User', () => {
 
   test('Delete User', async () => {
     const userId = (await user.create()).data.id
-    const response = await user.remove(userId)
-
+    let response = await user.remove(userId)
     expect(response.status).toEqual(200)
     expect(response.data.message).toEqual('User deleted.')
+
+    // check if user actually deleted
+    response = await user.getSingle(userId)
+    expect(response.status).toEqual(400)
+    expect(response.data.message).toEqual('No user found.')
+  })
+
+  test('Delete non-Existing User', async () => {
+    let response = await user.remove('invalid')
+    expect(response.status).toEqual(400)
+    expect(response.data.message).toEqual('No user found.')
   })
 })
