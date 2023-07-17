@@ -1,12 +1,11 @@
-import { signIn, user } from '../helpers'
+import { user } from '../helpers'
 
 describe('User', () => {
-  // uncomment beforeALL hook if the User spec failing after Auth spec
-  // alternate way - rerun server
-
-  beforeAll(async () => {
-    const response = await signIn(process.env.LOGIN, process.env.PASSWORD)
-    process.env.TOKEN = response.data.token
+  afterAll(async () => {
+    const response = (await user.getAll()).data
+    for (const singleUser of response) {
+      await user.remove(singleUser.id)
+    }
   })
 
   test('Create user', async () => {
@@ -25,6 +24,7 @@ describe('User', () => {
 
     expect(response.status).toEqual(200)
     expect(response.data.id).toEqual(userId)
+    expect(response.data.amount).toEqual(expect.any(Number))
   })
 
   test('Get all users', async () => {
@@ -33,6 +33,14 @@ describe('User', () => {
 
     expect(response.status).toEqual(200)
     expect(Array.isArray(response.data)).toBe(true)
+    expect(response.data.length).toBeGreaterThan(0)
+
+    for await (const user of response.data) {
+      expect(user).toEqual({
+        id: expect.any(String),
+        amount: expect.any(Number),
+      })
+    }
   })
 
   test('Delete User', async () => {

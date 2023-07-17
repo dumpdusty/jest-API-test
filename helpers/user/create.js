@@ -5,7 +5,7 @@ export const create = async () => {
     headers: { Authorization: `Bearer ${process.env.TOKEN}` },
   })
 
-  // another way to create axios requests (more complicated imho)
+  // another way to create axios requests
   // const config = {
   //   method: 'post',
   //   url: '/users',
