@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest",
-    "test-mult": "for i in {1..5}; do\n  npm run test\ndone"
+    "test": "jest"
   },
   "keywords": [],
   "author": "Dump Dusty",
