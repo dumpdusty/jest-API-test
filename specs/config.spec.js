@@ -1,17 +1,17 @@
 import { config } from '../helpers'
-// import { user, transactions } from '../helpers'
+import { user, transactions } from '../helpers'
 
-describe('Config', () => {
+describe('Config positive tests', () => {
   // wipe out config after each test
   afterEach(async () => {
     await config.cleanUp()
   })
 
   test('Get config', async () => {
-    const { status, data } = await config.getConfig()
+    const getConfigResponse = await config.getConfig()
 
-    expect(status).toEqual(200)
-    expect(data).toEqual({
+    expect(getConfigResponse.status).toEqual(200)
+    expect(getConfigResponse.data).toEqual({
       number_of_entries: expect.any(Number),
       initial_amount: expect.any(Number),
     })
@@ -66,5 +66,63 @@ describe('Config', () => {
     const configGetAfterDelete = await config.getConfig()
     expect(configGetAfterDelete.data.number_of_entries).toEqual(25)
     expect(configGetAfterDelete.data.initial_amount).toEqual(1000)
+  })
+
+  test.skip('verify users and transactions deleted after config wipe out', async () => {
+    const userFrom = await user.create()
+    const userTo = await user.create()
+    await transactions.create(userFrom.data.id, userTo.data.id)
+
+    // verify users and transaction created
+    expect((await user.getAll()).data).toHaveLength(2)
+    expect((await transactions.getAll()).data).toHaveLength(1)
+
+    await config.cleanUp()
+
+    //verify users and transaction deleted
+    expect((await user.getAll()).data).toHaveLength(0)
+    expect((await transactions.getAll()).data).toHaveLength(0)
+  })
+})
+
+describe.skip('Config negative tests', () => {
+  // wipe out config after each test
+  afterEach(async () => {
+    await config.cleanUp()
+  })
+
+  test('Update to minimum entries', async () => {
+    let usersIdList = []
+    // verify config updated
+    const updateResponse = await config.updateConfig(5)
+    expect(updateResponse.status).toEqual(200)
+    expect(updateResponse.data.number_of_entries).toEqual(5)
+
+    // create users
+    for (let i = 0; i < 5; i++) {
+      usersIdList.push((await user.create()).data.id)
+    }
+
+    // verify maximum quantity of users created
+    const failedUserCreateResponse = await user.create()
+    expect(failedUserCreateResponse.status).toEqual(400)
+    expect(failedUserCreateResponse.data.message).toEqual(
+      'Maximum number of users reached.'
+    )
+
+    // create transactions
+    for (let i = 0; i < 5; i++) {
+      await transactions.create(usersIdList[0], usersIdList[1])
+    }
+
+    // verify maximum quantity of transactions created
+    const failedTransactionCreateResponse = await transactions.create(
+      usersIdList[0],
+      usersIdList[1]
+    )
+    expect(failedTransactionCreateResponse.status).toEqual(400)
+    expect(failedTransactionCreateResponse.data.message).toEqual(
+      'Maximum number of transactions reached.'
+    )
   })
 })
