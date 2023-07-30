@@ -68,7 +68,7 @@ describe('Config positive tests', () => {
     expect(configGetAfterDelete.data.initial_amount).toEqual(1000)
   })
 
-  test.skip('verify users and transactions deleted after config wipe out', async () => {
+  test('verify users and transactions deleted after config wipe out', async () => {
     const userFrom = await user.create()
     const userTo = await user.create()
     await transactions.create(userFrom.data.id, userTo.data.id)
@@ -85,7 +85,7 @@ describe('Config positive tests', () => {
   })
 })
 
-describe.skip('Config negative tests', () => {
+describe('Config negative tests', () => {
   // wipe out config after each test
   afterEach(async () => {
     await config.cleanUp()
