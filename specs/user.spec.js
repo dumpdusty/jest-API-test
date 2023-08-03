@@ -51,7 +51,7 @@ describe('User', () => {
     // check if user actually deleted
     response = await user.getSingle(singleUser.data.id)
     expect(response.status).toEqual(400)
-    expect(response.data.message).toEqual('No user found.')
+    expect(response.data.message).toEqual('No user 1found.')
   })
 
   test('Delete non-Existing User', async () => {
